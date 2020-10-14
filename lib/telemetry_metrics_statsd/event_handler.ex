@@ -3,6 +3,7 @@ defmodule TelemetryMetricsStatsd.EventHandler do
 
   alias Telemetry.Metrics
   alias TelemetryMetricsStatsd.{Formatter, Packet, UDP}
+  require Logger
 
   @spec attach(
           [Metrics.t()],
@@ -66,6 +67,7 @@ defmodule TelemetryMetricsStatsd.EventHandler do
           tags = Enum.map(metric.tags, &{&1, Map.fetch!(tag_values, &1)})
           Formatter.format(formatter_mod, metric, prefix, value, tags)
         else
+          Logger.debug("nopublish")
           :nopublish
         end
       end
