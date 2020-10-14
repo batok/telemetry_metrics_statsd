@@ -55,6 +55,7 @@ defmodule TelemetryMetricsStatsd.EventHandler do
         formatter: formatter_mod,
         global_tags: global_tags
       }) do
+    Logger.debug("TelemetryMetricsStatsd.EventHandler.handle_event/4")
     packets =
       for metric <- metrics do
         if value = keep?(metric, metadata) && fetch_measurement(metric, measurements) do
@@ -122,6 +123,7 @@ defmodule TelemetryMetricsStatsd.EventHandler do
 
   @spec publish_metrics(pid(), :ets.tid(), [binary()]) :: :ok
   defp publish_metrics(reporter, pool_id, packets) do
+    Logger.debug("TelemetryMetricsStatsd.EventHandler.publish_metrics/3")
     udp = TelemetryMetricsStatsd.get_udp(pool_id)
 
     Enum.reduce_while(packets, :cont, fn packet, :cont ->
